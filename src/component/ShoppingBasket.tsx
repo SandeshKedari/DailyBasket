@@ -9,6 +9,8 @@ const ShoppingBasket: React.FC = () => {
     const subTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
     const totalSavings = items.reduce((total, item) => total + item.savings, 0);
     const totalAmount = subTotal - totalSavings;
+    const totalLimit = 20;
+    const totalPercent = (totalLimit * 90) / 100
     return (
         <div className='container py-4'>
             <div className='row'>
@@ -19,7 +21,7 @@ const ShoppingBasket: React.FC = () => {
                             <span>{product.name}</span>
                             <div className="d-flex align-items-center">
                                 <span className="me-2">£{product.price.toFixed(2)}</span>
-                                <button
+                                <button disabled={totalAmount >= 20}
                                     onClick={() => dispatch(addItem(product.id))}
                                     className="btn btn-success btn-sm"
                                 >
@@ -51,7 +53,8 @@ const ShoppingBasket: React.FC = () => {
                                             -
                                         </button>
                                         <span className="px-3">{item.quantity}</span>
-                                        <button
+
+                                        <button disabled={totalAmount >= 20}
                                             onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
                                             className="btn btn-sm btn-light"
                                         >
@@ -81,6 +84,9 @@ const ShoppingBasket: React.FC = () => {
                             </div>
                             <div className="d-flex justify-content-between mb-2 fw-bold fs-5">
                                 <span>Total Amount</span>
+                                {totalAmount >= totalPercent &&
+                                    <span> The total reaches on 90% of £20</span>
+                                }
                                 <span>£{totalAmount.toFixed(2)}</span>
                             </div>
 
